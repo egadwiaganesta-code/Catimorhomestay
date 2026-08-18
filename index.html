@@ -1,0 +1,1915 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hotel Room Management</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    background:#eef3f8;
+    color:#1f2937;
+}
+
+/* ================= LOGIN ================= */
+
+#loginPage{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+    background:
+        linear-gradient(135deg,#0f172a,#1e3a8a,#2563eb);
+}
+
+.login-box{
+    width:100%;
+    max-width:420px;
+    background:white;
+    border-radius:24px;
+    padding:35px;
+    box-shadow:0 25px 70px rgba(0,0,0,.25);
+}
+
+.login-logo{
+    width:75px;
+    height:75px;
+    margin:0 auto 18px;
+    border-radius:20px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#2563eb,#06b6d4);
+    color:white;
+    font-size:36px;
+}
+
+.login-box h1{
+    text-align:center;
+    font-size:27px;
+    margin-bottom:7px;
+}
+
+.login-box p{
+    text-align:center;
+    color:#64748b;
+    margin-bottom:25px;
+}
+
+.input-group{
+    margin-bottom:17px;
+}
+
+.input-group label{
+    display:block;
+    margin-bottom:7px;
+    font-weight:bold;
+    font-size:14px;
+}
+
+.input-group input,
+.modal input,
+.modal select{
+    width:100%;
+    padding:13px 14px;
+    border:1px solid #d1d5db;
+    border-radius:11px;
+    outline:none;
+    font-size:15px;
+    background:white;
+}
+
+.input-group input:focus,
+.modal input:focus,
+.modal select:focus{
+    border-color:#2563eb;
+    box-shadow:0 0 0 3px rgba(37,99,235,.12);
+}
+
+.login-btn{
+    width:100%;
+    border:0;
+    padding:14px;
+    border-radius:12px;
+    background:linear-gradient(135deg,#2563eb,#06b6d4);
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.login-btn:hover{
+    opacity:.9;
+}
+
+.login-error{
+    display:none;
+    margin-top:14px;
+    background:#fee2e2;
+    color:#b91c1c;
+    padding:10px;
+    border-radius:10px;
+    text-align:center;
+    font-size:14px;
+}
+
+/* ================= DASHBOARD ================= */
+
+#dashboard{
+    display:none;
+    min-height:100vh;
+}
+
+.header{
+    background:linear-gradient(135deg,#0f172a,#1e40af);
+    color:white;
+    padding:18px 25px;
+    position:sticky;
+    top:0;
+    z-index:50;
+    box-shadow:0 4px 18px rgba(0,0,0,.18);
+}
+
+.header-inner{
+    max-width:1600px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.brand-icon{
+    width:48px;
+    height:48px;
+    border-radius:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:rgba(255,255,255,.15);
+    font-size:25px;
+}
+
+.brand h1{
+    font-size:21px;
+}
+
+.brand small{
+    color:#bfdbfe;
+}
+
+.header-buttons{
+    display:flex;
+    gap:8px;
+}
+
+.header-buttons button{
+    border:0;
+    padding:10px 14px;
+    border-radius:9px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.reset-btn{
+    background:#f59e0b;
+    color:white;
+}
+
+.logout-btn{
+    background:#ef4444;
+    color:white;
+}
+
+/* ================= CONTENT ================= */
+
+.content{
+    max-width:1600px;
+    margin:auto;
+    padding:22px;
+}
+
+/* STAT */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.stat{
+    background:white;
+    padding:20px;
+    border-radius:17px;
+    box-shadow:0 4px 15px rgba(15,23,42,.07);
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.stat-icon{
+    width:52px;
+    height:52px;
+    border-radius:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:25px;
+}
+
+.stat.total .stat-icon{
+    background:#dbeafe;
+}
+
+.stat.occupied .stat-icon{
+    background:#fee2e2;
+}
+
+.stat.empty .stat-icon{
+    background:#dcfce7;
+}
+
+.stat h2{
+    font-size:25px;
+}
+
+.stat p{
+    color:#64748b;
+    font-size:13px;
+}
+
+/* TOOLBAR */
+
+.toolbar{
+    background:white;
+    padding:15px;
+    border-radius:15px;
+    margin-bottom:20px;
+    display:flex;
+    gap:12px;
+    align-items:center;
+    box-shadow:0 4px 15px rgba(15,23,42,.06);
+}
+
+.search{
+    flex:1;
+}
+
+.search input,
+.filter select{
+    width:100%;
+    padding:12px 13px;
+    border:1px solid #d1d5db;
+    border-radius:10px;
+    outline:none;
+    font-size:14px;
+}
+
+.filter{
+    width:180px;
+}
+
+/* ROOM GRID */
+
+.room-grid{
+    display:grid;
+    grid-template-columns:repeat(6,minmax(0,1fr));
+    gap:13px;
+}
+
+.room-card{
+    background:white;
+    border-radius:16px;
+    overflow:hidden;
+    box-shadow:0 4px 14px rgba(15,23,42,.08);
+    border:1px solid #e5e7eb;
+    transition:.2s;
+    min-width:0;
+}
+
+.room-card:hover{
+    transform:translateY(-3px);
+    box-shadow:0 9px 24px rgba(15,23,42,.13);
+}
+
+.room-top{
+    padding:13px;
+    color:white;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.room-card.empty .room-top{
+    background:linear-gradient(135deg,#059669,#10b981);
+}
+
+.room-card.occupied .room-top{
+    background:linear-gradient(135deg,#dc2626,#f97316);
+}
+
+.room-number{
+    font-size:20px;
+    font-weight:bold;
+}
+
+.status{
+    font-size:11px;
+    padding:5px 8px;
+    border-radius:20px;
+    background:rgba(255,255,255,.2);
+    white-space:nowrap;
+}
+
+.room-body{
+    padding:13px;
+}
+
+.guest-name{
+    font-size:15px;
+    font-weight:bold;
+    margin-bottom:5px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.guest-location{
+    color:#64748b;
+    font-size:12px;
+    min-height:30px;
+}
+
+.checkin-time{
+    margin-top:9px;
+    padding:8px;
+    background:#f1f5f9;
+    border-radius:8px;
+    font-size:11px;
+    color:#475569;
+}
+
+.empty-info{
+    color:#94a3b8;
+    font-size:12px;
+    min-height:45px;
+    display:flex;
+    align-items:center;
+}
+
+.room-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:7px;
+    margin-top:11px;
+}
+
+.room-actions button{
+    border:0;
+    padding:9px 5px;
+    border-radius:8px;
+    color:white;
+    cursor:pointer;
+    font-weight:bold;
+    font-size:11px;
+}
+
+.checkin-btn{
+    background:#2563eb;
+}
+
+.checkout-btn{
+    background:#f97316;
+}
+
+.room-actions button:disabled{
+    background:#cbd5e1;
+    cursor:not-allowed;
+}
+
+/* ================= MODAL ================= */
+
+.modal-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(15,23,42,.65);
+    z-index:100;
+    padding:20px;
+    overflow:auto;
+}
+
+.modal{
+    background:white;
+    width:100%;
+    max-width:520px;
+    margin:40px auto;
+    border-radius:20px;
+    padding:25px;
+    box-shadow:0 25px 80px rgba(0,0,0,.3);
+}
+
+.modal-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.modal-header h2{
+    font-size:20px;
+}
+
+.close{
+    width:35px;
+    height:35px;
+    border:0;
+    border-radius:50%;
+    background:#f1f5f9;
+    cursor:pointer;
+    font-size:20px;
+}
+
+.form-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+}
+
+.form-group{
+    margin-bottom:14px;
+}
+
+.form-group label{
+    display:block;
+    margin-bottom:6px;
+    font-size:13px;
+    font-weight:bold;
+}
+
+.modal-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:18px;
+}
+
+.modal-actions button{
+    padding:12px;
+    border:0;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.save{
+    background:#2563eb;
+    color:white;
+}
+
+.cancel{
+    background:#e5e7eb;
+    color:#374151;
+}
+
+.checkout-summary{
+    background:#fff7ed;
+    border:1px solid #fed7aa;
+    padding:14px;
+    border-radius:12px;
+    margin-bottom:18px;
+}
+
+.checkout-summary strong{
+    color:#c2410c;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:1300px){
+    .room-grid{
+        grid-template-columns:repeat(5,minmax(0,1fr));
+    }
+}
+
+@media(max-width:1050px){
+    .room-grid{
+        grid-template-columns:repeat(4,minmax(0,1fr));
+    }
+}
+
+@media(max-width:800px){
+    .room-grid{
+        grid-template-columns:repeat(3,minmax(0,1fr));
+        gap:10px;
+    }
+
+    .content{
+        padding:13px;
+    }
+
+    .stats{
+        gap:9px;
+    }
+
+    .stat{
+        padding:13px;
+    }
+
+    .stat h2{
+        font-size:20px;
+    }
+
+    .stat-icon{
+        width:40px;
+        height:40px;
+        font-size:20px;
+    }
+
+    .toolbar{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .filter{
+        width:100%;
+    }
+}
+
+@media(max-width:560px){
+    .header{
+        padding:12px;
+    }
+
+    .header-inner{
+        align-items:flex-start;
+    }
+
+    .brand h1{
+        font-size:16px;
+    }
+
+    .brand small{
+        font-size:10px;
+    }
+
+    .brand-icon{
+        width:40px;
+        height:40px;
+    }
+
+    .header-buttons{
+        flex-direction:column;
+    }
+
+    .header-buttons button{
+        padding:7px 9px;
+        font-size:10px;
+    }
+
+    .stats{
+        grid-template-columns:repeat(3,1fr);
+    }
+
+    .stat{
+        display:block;
+        text-align:center;
+    }
+
+    .stat-icon{
+        margin:auto auto 5px;
+    }
+
+    .stat p{
+        font-size:10px;
+    }
+
+    .stat h2{
+        font-size:18px;
+    }
+
+    .room-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+
+    .room-top{
+        padding:10px;
+    }
+
+    .room-number{
+        font-size:17px;
+    }
+
+    .room-body{
+        padding:10px;
+    }
+
+    .guest-name{
+        font-size:13px;
+    }
+
+    .room-actions{
+        grid-template-columns:1fr;
+    }
+
+    .room-actions button{
+        padding:8px;
+    }
+
+    .form-row{
+        grid-template-columns:1fr;
+    }
+
+    .login-box{
+        padding:25px 20px;
+    }
+}
+
+@media(max-width:350px){
+    .room-grid{
+        grid-template-columns:1fr 1fr;
+        gap:7px;
+    }
+
+    .room-number{
+        font-size:15px;
+    }
+
+    .status{
+        font-size:9px;
+        padding:4px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ================= LOGIN ================= -->
+
+<section id="loginPage">
+
+    <div class="login-box">
+
+        <div class="login-logo">🏨</div>
+
+        <h1>Hotel Management</h1>
+        <p>Silakan login untuk mengelola kamar</p>
+
+        <form id="loginForm">
+
+            <div class="input-group">
+                <label>Login ID</label>
+                <input
+                    type="text"
+                    id="loginId"
+                    placeholder="Masukkan Login ID"
+                    autocomplete="username"
+                    required
+                >
+            </div>
+
+            <div class="input-group">
+                <label>Password</label>
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Masukkan Password"
+                    autocomplete="current-password"
+                    required
+                >
+            </div>
+
+            <button class="login-btn" type="submit">
+                🔐 LOGIN
+            </button>
+
+            <div class="login-error" id="loginError">
+                Login ID atau Password salah!
+            </div>
+
+        </form>
+
+    </div>
+
+</section>
+
+
+<!-- ================= DASHBOARD ================= -->
+
+<section id="dashboard">
+
+    <header class="header">
+
+        <div class="header-inner">
+
+            <div class="brand">
+
+                <div class="brand-icon">🏨</div>
+
+                <div>
+                    <h1>Hotel Room Management</h1>
+                    <small>Dashboard Manajemen 34 Kamar</small>
+                </div>
+
+            </div>
+
+            <div class="header-buttons">
+
+                <button class="reset-btn" onclick="resetData()">
+                    ♻ Reset Data
+                </button>
+
+                <button class="logout-btn" onclick="logout()">
+                    🚪 Logout
+                </button>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <main class="content">
+
+        <!-- STATISTIK -->
+
+        <div class="stats">
+
+            <div class="stat total">
+
+                <div class="stat-icon">🏨</div>
+
+                <div>
+                    <h2 id="totalRooms">34</h2>
+                    <p>Total Kamar</p>
+                </div>
+
+            </div>
+
+
+            <div class="stat occupied">
+
+                <div class="stat-icon">🔴</div>
+
+                <div>
+                    <h2 id="occupiedRooms">0</h2>
+                    <p>Kamar Terisi</p>
+                </div>
+
+            </div>
+
+
+            <div class="stat empty">
+
+                <div class="stat-icon">🟢</div>
+
+                <div>
+                    <h2 id="emptyRooms">34</h2>
+                    <p>Kamar Kosong</p>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- TOOLBAR -->
+
+        <div class="toolbar">
+
+            <div class="search">
+                <input
+                    type="text"
+                    id="searchRoom"
+                    placeholder="🔎 Cari nomor kamar atau nama tamu..."
+                    oninput="renderRooms()"
+                >
+            </div>
+
+            <div class="filter">
+
+                <select id="filterStatus" onchange="renderRooms()">
+
+                    <option value="all">Semua Kamar</option>
+                    <option value="occupied">Terisi</option>
+                    <option value="empty">Kosong</option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <!-- 34 KAMAR -->
+
+        <div class="room-grid" id="roomGrid"></div>
+
+    </main>
+
+</section>
+
+
+<!-- ================= CHECK IN MODAL ================= -->
+
+<div class="modal-overlay" id="checkinModal">
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <h2>🛎 Check In - Kamar <span id="checkinRoom"></span></h2>
+
+            <button class="close" onclick="closeModal('checkinModal')">
+                ×
+            </button>
+
+        </div>
+
+        <form id="checkinForm">
+
+            <input type="hidden" id="selectedRoom">
+
+            <div class="form-group">
+
+                <label>Nama Tamu</label>
+
+                <input
+                    type="text"
+                    id="guestName"
+                    placeholder="Contoh: John Smith"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label>Negara</label>
+
+                    <select id="guestCountry" required>
+
+                        <option value="">Pilih Negara</option>
+                        <option>Indonesia</option>
+                        <option>Malaysia</option>
+                        <option>Singapore</option>
+                        <option>Thailand</option>
+                        <option>Japan</option>
+                        <option>South Korea</option>
+                        <option>China</option>
+                        <option>Australia</option>
+                        <option>United States</option>
+                        <option>United Kingdom</option>
+                        <option>Germany</option>
+                        <option>France</option>
+                        <option>Netherlands</option>
+                        <option>Saudi Arabia</option>
+                        <option>United Arab Emirates</option>
+                        <option>Other</option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Kota</label>
+
+                    <input
+                        type="text"
+                        id="guestCity"
+                        placeholder="Contoh: Jakarta"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label>Tanggal Check In</label>
+
+                    <input
+                        type="date"
+                        id="checkinDate"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Waktu Check In</label>
+
+                    <input
+                        type="time"
+                        id="checkinTime"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label>Tanggal Rencana Check Out</label>
+
+                    <input
+                        type="date"
+                        id="plannedCheckoutDate"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Waktu Rencana Check Out</label>
+
+                    <input
+                        type="time"
+                        id="plannedCheckoutTime"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="cancel"
+                    onclick="closeModal('checkinModal')"
+                >
+                    Batal
+                </button>
+
+                <button type="submit" class="save">
+                    ✓ Simpan Check In
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- ================= CHECK OUT MODAL ================= -->
+
+<div class="modal-overlay" id="checkoutModal">
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <h2>🚪 Check Out - Kamar <span id="checkoutRoom"></span></h2>
+
+            <button class="close" onclick="closeModal('checkoutModal')">
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="checkout-summary">
+
+            <div>
+                <strong>Tamu:</strong>
+                <span id="checkoutGuest"></span>
+            </div>
+
+            <div>
+                <strong>Asal:</strong>
+                <span id="checkoutLocation"></span>
+            </div>
+
+        </div>
+
+
+        <form id="checkoutForm">
+
+            <input type="hidden" id="checkoutSelectedRoom">
+
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label>Tanggal Check Out</label>
+
+                    <input
+                        type="date"
+                        id="checkoutDate"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Waktu Check Out</label>
+
+                    <input
+                        type="time"
+                        id="checkoutTime"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Catatan Check Out</label>
+
+                <input
+                    type="text"
+                    id="checkoutNote"
+                    placeholder="Contoh: Pembayaran selesai / Tidak ada catatan"
+                >
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="cancel"
+                    onclick="closeModal('checkoutModal')"
+                >
+                    Batal
+                </button>
+
+                <button type="submit" class="save">
+                    ✓ Konfirmasi Check Out
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   KONFIGURASI
+========================================================= */
+
+const LOGIN_ID = "12345";
+const LOGIN_PASSWORD = "12345";
+
+const STORAGE_KEY = "hotel_room_data_v1";
+const HISTORY_KEY = "hotel_checkout_history_v1";
+
+const TOTAL_ROOMS = 34;
+
+
+/* =========================================================
+   DATA KAMAR
+========================================================= */
+
+let rooms = [];
+
+let checkoutHistory = [];
+
+
+/* =========================================================
+   GENERATE 34 KAMAR
+========================================================= */
+
+function createDefaultRooms(){
+
+    const data = [];
+
+    for(let i = 1; i <= TOTAL_ROOMS; i++){
+
+        data.push({
+
+            number: i,
+
+            status: "empty",
+
+            guestName: "",
+
+            country: "",
+
+            city: "",
+
+            checkinDate: "",
+
+            checkinTime: "",
+
+            plannedCheckoutDate: "",
+
+            plannedCheckoutTime: "",
+
+            checkoutDate: "",
+
+            checkoutTime: "",
+
+            checkoutNote: ""
+
+        });
+
+    }
+
+    return data;
+
+}
+
+
+/* =========================================================
+   LOCAL STORAGE
+========================================================= */
+
+function loadData(){
+
+    const savedRooms = localStorage.getItem(STORAGE_KEY);
+
+    const savedHistory = localStorage.getItem(HISTORY_KEY);
+
+
+    if(savedRooms){
+
+        try{
+
+            rooms = JSON.parse(savedRooms);
+
+        }catch(error){
+
+            rooms = createDefaultRooms();
+
+        }
+
+    }else{
+
+        rooms = createDefaultRooms();
+
+    }
+
+
+    if(savedHistory){
+
+        try{
+
+            checkoutHistory = JSON.parse(savedHistory);
+
+        }catch(error){
+
+            checkoutHistory = [];
+
+        }
+
+    }else{
+
+        checkoutHistory = [];
+
+    }
+
+}
+
+
+function saveData(){
+
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(rooms)
+    );
+
+    localStorage.setItem(
+        HISTORY_KEY,
+        JSON.stringify(checkoutHistory)
+    );
+
+}
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+document
+.getElementById("loginForm")
+.addEventListener("submit", function(e){
+
+    e.preventDefault();
+
+    const id =
+        document.getElementById("loginId").value.trim();
+
+    const password =
+        document.getElementById("password").value;
+
+
+    if(id === LOGIN_ID && password === LOGIN_PASSWORD){
+
+        sessionStorage.setItem("hotel_logged_in","true");
+
+        showDashboard();
+
+    }else{
+
+        document.getElementById("loginError").style.display = "block";
+
+    }
+
+});
+
+
+function showDashboard(){
+
+    document.getElementById("loginPage").style.display = "none";
+
+    document.getElementById("dashboard").style.display = "block";
+
+    loadData();
+
+    renderRooms();
+
+    updateStats();
+
+}
+
+
+function logout(){
+
+    sessionStorage.removeItem("hotel_logged_in");
+
+    document.getElementById("dashboard").style.display = "none";
+
+    document.getElementById("loginPage").style.display = "flex";
+
+    document.getElementById("password").value = "";
+
+}
+
+
+function checkSession(){
+
+    if(sessionStorage.getItem("hotel_logged_in") === "true"){
+
+        showDashboard();
+
+    }
+
+}
+
+
+/* =========================================================
+   DATE & TIME
+========================================================= */
+
+function getCurrentDate(){
+
+    const now = new Date();
+
+    const year = now.getFullYear();
+
+    const month =
+        String(now.getMonth()+1).padStart(2,"0");
+
+    const day =
+        String(now.getDate()).padStart(2,"0");
+
+    return `${year}-${month}-${day}`;
+
+}
+
+
+function getCurrentTime(){
+
+    const now = new Date();
+
+    const hours =
+        String(now.getHours()).padStart(2,"0");
+
+    const minutes =
+        String(now.getMinutes()).padStart(2,"0");
+
+    return `${hours}:${minutes}`;
+
+}
+
+
+function formatDate(date){
+
+    if(!date) return "-";
+
+    const d = new Date(date + "T00:00:00");
+
+    return d.toLocaleDateString(
+        "id-ID",
+        {
+            day:"2-digit",
+            month:"short",
+            year:"numeric"
+        }
+    );
+
+}
+
+
+/* =========================================================
+   RENDER KAMAR
+========================================================= */
+
+function renderRooms(){
+
+    const grid =
+        document.getElementById("roomGrid");
+
+    const search =
+        document
+        .getElementById("searchRoom")
+        .value
+        .toLowerCase();
+
+    const filter =
+        document
+        .getElementById("filterStatus")
+        .value;
+
+
+    grid.innerHTML = "";
+
+
+    rooms.forEach(room => {
+
+        const searchable =
+            `${room.number}
+            ${room.guestName}
+            ${room.country}
+            ${room.city}`.toLowerCase();
+
+
+        if(!searchable.includes(search)) return;
+
+        if(filter !== "all" && room.status !== filter) return;
+
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            `room-card ${room.status}`;
+
+
+        if(room.status === "occupied"){
+
+            card.innerHTML = `
+
+                <div class="room-top">
+
+                    <div class="room-number">
+                        Kamar ${room.number}
+                    </div>
+
+                    <div class="status">
+                        TERISI
+                    </div>
+
+                </div>
+
+
+                <div class="room-body">
+
+                    <div class="guest-name"
+                         title="${escapeHTML(room.guestName)}">
+
+                        👤 ${escapeHTML(room.guestName)}
+
+                    </div>
+
+
+                    <div class="guest-location">
+
+                        🌎 ${escapeHTML(room.country)}
+                        <br>
+                        📍 ${escapeHTML(room.city)}
+
+                    </div>
+
+
+                    <div class="checkin-time">
+
+                        🕐 Check In:<br>
+                        ${formatDate(room.checkinDate)}
+                        ${room.checkinTime}
+
+                    </div>
+
+
+                    <div class="checkin-time">
+
+                        📅 Rencana Check Out:<br>
+                        ${formatDate(room.plannedCheckoutDate)}
+                        ${room.plannedCheckoutTime}
+
+                    </div>
+
+
+                    <div class="room-actions">
+
+                        <button
+                            class="checkin-btn"
+                            disabled>
+
+                            ✓ Terisi
+
+                        </button>
+
+                        <button
+                            class="checkout-btn"
+                            onclick="openCheckout(${room.number})">
+
+                            🚪 Check Out
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        }else{
+
+            card.innerHTML = `
+
+                <div class="room-top">
+
+                    <div class="room-number">
+                        Kamar ${room.number}
+                    </div>
+
+                    <div class="status">
+                        KOSONG
+                    </div>
+
+                </div>
+
+
+                <div class="room-body">
+
+                    <div class="empty-info">
+
+                        🛏️ Kamar siap digunakan
+
+                    </div>
+
+
+                    <div class="room-actions">
+
+                        <button
+                            class="checkin-btn"
+                            onclick="openCheckin(${room.number})">
+
+                            🛎 Check In
+
+                        </button>
+
+                        <button
+                            class="checkout-btn"
+                            disabled>
+
+                            Check Out
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        }
+
+
+        grid.appendChild(card);
+
+    });
+
+
+    updateStats();
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHTML(text){
+
+    if(!text) return "";
+
+    return String(text)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+/* =========================================================
+   STATISTIK
+========================================================= */
+
+function updateStats(){
+
+    const occupied =
+        rooms.filter(
+            room => room.status === "occupied"
+        ).length;
+
+
+    const empty =
+        TOTAL_ROOMS - occupied;
+
+
+    document.getElementById("totalRooms").textContent =
+        TOTAL_ROOMS;
+
+    document.getElementById("occupiedRooms").textContent =
+        occupied;
+
+    document.getElementById("emptyRooms").textContent =
+        empty;
+
+}
+
+
+/* =========================================================
+   CHECK IN
+========================================================= */
+
+function openCheckin(roomNumber){
+
+    const room =
+        rooms.find(r => r.number === roomNumber);
+
+    if(!room) return;
+
+
+    document.getElementById("selectedRoom").value =
+        roomNumber;
+
+    document.getElementById("checkinRoom").textContent =
+        roomNumber;
+
+
+    document.getElementById("guestName").value = "";
+
+    document.getElementById("guestCountry").value = "";
+
+    document.getElementById("guestCity").value = "";
+
+    document.getElementById("checkinDate").value =
+        getCurrentDate();
+
+    document.getElementById("checkinTime").value =
+        getCurrentTime();
+
+
+    document.getElementById("plannedCheckoutDate").value =
+        getCurrentDate();
+
+    document.getElementById("plannedCheckoutTime").value =
+        "12:00";
+
+
+    document.getElementById("checkinModal").style.display =
+        "block";
+
+}
+
+
+document
+.getElementById("checkinForm")
+.addEventListener("submit", function(e){
+
+    e.preventDefault();
+
+
+    const roomNumber =
+        Number(
+            document.getElementById("selectedRoom").value
+        );
+
+
+    const room =
+        rooms.find(r => r.number === roomNumber);
+
+
+    if(!room) return;
+
+
+    room.status = "occupied";
+
+    room.guestName =
+        document.getElementById("guestName").value.trim();
+
+    room.country =
+        document.getElementById("guestCountry").value;
+
+    room.city =
+        document.getElementById("guestCity").value.trim();
+
+    room.checkinDate =
+        document.getElementById("checkinDate").value;
+
+    room.checkinTime =
+        document.getElementById("checkinTime").value;
+
+    room.plannedCheckoutDate =
+        document.getElementById("plannedCheckoutDate").value;
+
+    room.plannedCheckoutTime =
+        document.getElementById("plannedCheckoutTime").value;
+
+
+    room.checkoutDate = "";
+
+    room.checkoutTime = "";
+
+    room.checkoutNote = "";
+
+
+    saveData();
+
+    closeModal("checkinModal");
+
+    renderRooms();
+
+});
+
+
+/* =========================================================
+   CHECK OUT
+========================================================= */
+
+function openCheckout(roomNumber){
+
+    const room =
+        rooms.find(r => r.number === roomNumber);
+
+    if(!room || room.status !== "occupied") return;
+
+
+    document.getElementById("checkoutSelectedRoom").value =
+        roomNumber;
+
+    document.getElementById("checkoutRoom").textContent =
+        roomNumber;
+
+
+    document.getElementById("checkoutGuest").textContent =
+        room.guestName;
+
+
+    document.getElementById("checkoutLocation").textContent =
+        `${room.city}, ${room.country}`;
+
+
+    /*
+       BAGIAN INI MEMBUAT FORM CHECK OUT
+       BISA DIISI / DIUBAH MANUAL
+    */
+
+    document.getElementById("checkoutDate").value =
+        getCurrentDate();
+
+    document.getElementById("checkoutTime").value =
+        getCurrentTime();
+
+    document.getElementById("checkoutNote").value = "";
+
+
+    document.getElementById("checkoutModal").style.display =
+        "block";
+
+}
+
+
+document
+.getElementById("checkoutForm")
+.addEventListener("submit", function(e){
+
+    e.preventDefault();
+
+
+    const roomNumber =
+        Number(
+            document.getElementById(
+                "checkoutSelectedRoom"
+            ).value
+        );
+
+
+    const room =
+        rooms.find(r => r.number === roomNumber);
+
+
+    if(!room) return;
+
+
+    const checkoutDate =
+        document.getElementById("checkoutDate").value;
+
+    const checkoutTime =
+        document.getElementById("checkoutTime").value;
+
+    const checkoutNote =
+        document.getElementById("checkoutNote").value.trim();
+
+
+    /*
+       SIMPAN RIWAYAT CHECK OUT
+       SEBELUM KAMAR DIKOSONGKAN
+    */
+
+    checkoutHistory.push({
+
+        roomNumber: room.number,
+
+        guestName: room.guestName,
+
+        country: room.country,
+
+        city: room.city,
+
+        checkinDate: room.checkinDate,
+
+        checkinTime: room.checkinTime,
+
+        plannedCheckoutDate:
+            room.plannedCheckoutDate,
+
+        plannedCheckoutTime:
+            room.plannedCheckoutTime,
+
+        checkoutDate: checkoutDate,
+
+        checkoutTime: checkoutTime,
+
+        checkoutNote: checkoutNote
+
+    });
+
+
+    /*
+       KAMAR KEMBALI KOSONG
+    */
+
+    room.status = "empty";
+
+    room.guestName = "";
+
+    room.country = "";
+
+    room.city = "";
+
+    room.checkinDate = "";
+
+    room.checkinTime = "";
+
+    room.plannedCheckoutDate = "";
+
+    room.plannedCheckoutTime = "";
+
+    room.checkoutDate = checkoutDate;
+
+    room.checkoutTime = checkoutTime;
+
+    room.checkoutNote = checkoutNote;
+
+
+    saveData();
+
+    closeModal("checkoutModal");
+
+    renderRooms();
+
+
+    alert(
+        `Check Out Kamar ${roomNumber} berhasil.\n\n` +
+        `Tanggal: ${formatDate(checkoutDate)}\n` +
+        `Waktu: ${checkoutTime}`
+    );
+
+});
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+function closeModal(id){
+
+    document.getElementById(id).style.display =
+        "none";
+
+}
+
+
+window.addEventListener("click", function(e){
+
+    if(e.target.classList.contains("modal-overlay")){
+
+        e.target.style.display = "none";
+
+    }
+
+});
+
+
+/* =========================================================
+   RESET DATA
+========================================================= */
+
+function resetData(){
+
+    const confirmReset =
+        confirm(
+            "PERINGATAN!\n\n" +
+            "Semua data kamar dan riwayat Check Out " +
+            "akan dihapus dari browser.\n\n" +
+            "Apakah Anda yakin?"
+        );
+
+
+    if(!confirmReset) return;
+
+
+    rooms = createDefaultRooms();
+
+    checkoutHistory = [];
+
+
+    saveData();
+
+    renderRooms();
+
+
+    alert("Semua data berhasil direset.");
+
+}
+
+
+/* =========================================================
+   START APPLICATION
+========================================================= */
+
+checkSession();
+
+</script>
+
+</body>
+</html>
